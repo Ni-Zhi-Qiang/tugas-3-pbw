@@ -1,34 +1,17 @@
-// Komponen Status Badge
-Vue.component('status-badge', {
-    template: '#tpl-status-badge',
-    props: {
-        qty: {
-            type: Number,
-            required: true
-        },
-        safety: {
-            type: Number,
-            required: true
-        }
+export default {
+  template: '#tpl-status-badge',
+  props: ['qty', 'safety'],
+  computed: {
+    status() {
+      if (this.qty === 0) return 'kosong';
+      if (this.qty < this.safety) return 'menipis';
+      return 'aman';
     },
-    computed: {
-        status() {
-            if (this.qty === 0) {
-                return {
-                    text: 'Kosong',
-                    class: 'status-kosong'
-                };
-            } else if (this.qty < this.safety) {
-                return {
-                    text: 'Menipis', 
-                    class: 'status-menipis'
-                };
-            } else {
-                return {
-                    text: 'Aman',
-                    class: 'status-aman'
-                };
-            }
-        }
+    cssClass() {
+      return this.status === 'aman' ? 'safe' : (this.status === 'menipis' ? 'warn' : 'empty');
+    },
+    label() {
+      return this.status === 'aman' ? 'Aman' : (this.status === 'menipis' ? 'Menipis' : 'Kosong');
     }
-});
+  }
+}

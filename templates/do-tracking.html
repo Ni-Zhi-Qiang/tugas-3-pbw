@@ -1,0 +1,113 @@
+<template id="tpl-do-tracking">
+
+    <div class="container card">
+
+        <!-- SEARCH BAR -->
+        <div class="form-row">
+            <input v-model="query" placeholder="Cari DO atau NIM, tekan Enter" />
+            <button class="btn btn-blue" @click="search">Cari</button>
+            <button class="btn btn-outline" @click="query=''; results=[]">Reset (Esc)</button>
+        </div>
+
+        <!-- FORM TAMBAH DO BARU -->
+        <div class="card" style="margin-top:12px">
+            <h4>Tambah DO Baru</h4>
+
+            <div class="form-row">
+
+                <div class="input-group">
+                    <label>NIM</label>
+                    <input v-model="newDo.nim" placeholder="Masukkan NIM mahasiswa" />
+                </div>
+
+                <div class="input-group">
+                    <label>Nama</label>
+                    <input v-model="newDo.nama" placeholder="Masukkan nama mahasiswa" />
+                </div>
+
+                <div class="input-group">
+                    <label>Ekspedisi</label>
+                    <select v-model="newDo.ekspedisi">
+                        <option value="REG">Reguler</option>
+                        <option value="EXP">Ekspres</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-row">
+
+                <div class="input-group">
+                    <label>Paket Bahan Ajar</label>
+                    <select v-model="newDo.paket" @change="onPaketChange">
+                        <option value="">-- Pilih Paket --</option>
+                        <option v-for="p in paketList" :value="p.kode">
+                            {{ p.kode }} — {{ p.nama }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Tanggal Pengiriman</label>
+                    <input type="date" v-model="newDo.tanggalKirim" />
+                </div>
+
+                <div class="input-group" style="align-self:flex-end">
+                    <button class="btn btn-blue" style="margin-top:6px" @click="addDo">
+                        Tambah DO
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- DETAIL PAKET -->
+            <div v-if="paketDetail" style="margin-top:6px;">
+                <strong>Detail Paket:</strong><br />
+                Kode: {{ paketDetail.kode }} — Harga: {{ $root.$fmtRp(paketDetail.harga) }}<br />
+                Isi: <span v-for="i in paketDetail.isi" :key="i">{{ i }} </span>
+            </div>
+
+        </div>
+
+        <!-- HASIL PENCARIAN -->
+        <div style="margin-top:12px">
+            <h4>Hasil Pencarian</h4>
+
+            <div v-if="results.length === 0">
+                Tidak ada hasil
+            </div>
+
+            <div v-for="r in results" :key="Object.keys(r)[0]" class="card" style="margin-top:12px">
+                <div v-for="(val, key) in r" :key="key">
+                    <h5>{{ key }} — {{ val.nama }} ({{ val.nim }})</h5>
+
+                    <div>
+                        Status: {{ val.status }} |
+                        Ekspedisi: {{ val.ekspedisi }} |
+                        Tanggal: {{ val.tanggalKirim }} |
+                        Total: {{ $root.$fmtRp(val.total) }}
+                    </div>
+
+                    <div style="margin-top:10px">
+                        <h6>Perjalanan:</h6>
+                        <ul>
+                            <li v-for="p in val.perjalanan" :key="p.waktu">
+                                {{ p.waktu }} — {{ p.keterangan }}
+                            </li>
+                        </ul>
+
+                        <input v-model="val._new" placeholder="Keterangan update perjalanan" />
+                        <button class="btn btn-primary"
+                                @click="addProgress(Object.keys(r)[0], val._new); val._new=''">
+                            Tambah Progress
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</template>

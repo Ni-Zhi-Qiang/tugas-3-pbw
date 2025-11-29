@@ -1,0 +1,63 @@
+<template id="tpl-stock-table">
+    <div class="container card">
+        <div class="controls">
+            <input v-model="filters.keyword" placeholder="Cari kode / judul..." />
+            <select v-model="filters.upbjj">
+                <option value="">-- Semua UPBJJ --</option>
+                <option v-for="u in upbjjList" :value="u" :key="u">{{u}}</option>
+            </select>
+            <select v-model="filters.kategori" v-if="filters.upbjj">
+                <option value="">-- Semua Kategori --</option>
+                <option v-for="k in kategoriList" :value="k" :key="k">{{k}}</option>
+            </select>
+            <label><input type="checkbox" v-model="filters.lowStock" /> Menipis</label>
+            <label><input type="checkbox" v-model="filters.zero" /> Kosong</label>
+            <button class="btn" @click="resetFilters()">Reset</button>
+            <button class="btn" @click="openCreate()">Tambah Bahan Ajar</button>
+        </div>
+
+        <table class="table card">
+            <thead>
+                <tr>
+                    <th @click="setSort('kode')">Kode</th>
+                    <th @click="setSort('judul')">Judul</th>
+                    <th>Kategori</th>
+                    <th>UPBJJ</th>
+                    <th>Lokasi Rak</th>
+                    <th @click="setSort('harga')">Harga</th>
+                    <th @click="setSort('qty')">Qty</th>
+                    <th>Safety</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in filtered" :key="item.kode">
+                    <td>{{item.kode}}</td>
+                    <td v-text="item.judul"></td>
+                    <td>{{item.kategori}}</td>
+                    <td>{{item.upbjj}}</td>
+                    <td>{{item.lokasiRak}}</td>
+                    <td>{{ $root.$fmtRp(item.harga) }}</td>
+                    <td>{{ $root.$fmtQty(item.qty) }}</td>
+                    <td>{{ $root.$fmtQty(item.safety) }}</td>
+                    <td>
+                        <status-badge :qty="item.qty" :safety="item.safety"></status-badge>
+                        <span class="tooltip" v-if="item.catatanHTML">
+                            <small class="hint">[i]</small>
+                            <div class="tip" v-html="item.catatanHTML"></div>
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn" @click="openEdit(item)">Edit</button>
+                        <button class="btn danger" @click="remove(item)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <app-modal v-if="showModal" :show="showModal" :title="modalMode==='create' ? 'Tambah' : 'Edit'" @close="showModal=false">
+            <order-form :model="editItem || {}" :upbjjList="upbjjList" :kategoriList="kategoriList" @submit="onSave" @cancel="()=>showModal=false"></order-form>
+        </app-modal>
+    </div>
+</template>

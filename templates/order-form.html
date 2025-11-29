@@ -1,0 +1,62 @@
+<template id="tpl-order-form">
+    <div class="modal">
+        <h3>{{ model.kode ? 'Edit Bahan Ajar' : 'Tambah Bahan Ajar' }}</h3>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label>Kode</label>
+                <input v-model="local.kode" placeholder="Contoh: EKMA4116" />
+            </div>
+
+            <div class="input-group">
+                <label>Judul Bahan Ajar</label>
+                <input v-model="local.judul" placeholder="Nama bahan ajar..." />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label>Kategori</label>
+                <select v-model="local.kategori">
+                    <option v-for="k in kategoriList" :key="k">{{ k }}</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>UPBJJ</label>
+                <select v-model="local.upbjj">
+                    <option v-for="u in upbjjList" :key="u">{{ u }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label>Harga</label>
+                <input type="number" v-model.number="local.harga" placeholder="0" />
+                <span class="text-muted">Dalam rupiah</span>
+            </div>
+
+            <div class="input-group">
+                <label>Qty</label>
+                <input type="number" v-model.number="local.qty" placeholder="0" />
+            </div>
+
+            <div class="input-group">
+                <label>Safety Stock</label>
+                <input type="number" v-model.number="local.safety" placeholder="0" />
+            </div>
+        </div>
+
+        <div style="text-align:right; margin-top: 12px;">
+            <button class="btn btn-outline" @click="$emit('cancel')">Batal (ESC)</button>
+            <button class="btn btn-primary" style="margin-left:10px" @click="submitForm">
+                Simpan (ENTER)
+            </button>
+        </div>
+
+        <div v-if="Object.keys(errors).length" style="margin-top:12px;color:#d10000;">
+            <div v-for="(v,k) in errors" :key="k">{{ v }}</div>
+        </div>
+    </div>
+</template>

@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "D:\\Users\\user\\Documents\\UT\\Tugas 3 - Pemrograman Berbasis Web\\tugas3-vue-ut\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8BEE3207-FF6C-4C26-BFE0-1A325DD52309}|tugas3-vue-ut.esproj|d:\\users\\user\\documents\\ut\\tugas 3 - pemrograman berbasis web\\tugas3-vue-ut\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{8BEE3207-FF6C-4C26-BFE0-1A325DD52309}|tugas3-vue-ut.esproj|solutionrelative:index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{8BEE3207-FF6C-4C26-BFE0-1A325DD52309}|tugas3-vue-ut.esproj|d:\\users\\user\\documents\\ut\\tugas 3 - pemrograman berbasis web\\tugas3-vue-ut\\templates\\do-tracking.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8BEE3207-FF6C-4C26-BFE0-1A325DD52309}|tugas3-vue-ut.esproj|solutionrelative:templates\\do-tracking.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8BEE3207-FF6C-4C26-BFE0-1A325DD52309}|tugas3-vue-ut.esproj|d:\\users\\user\\documents\\ut\\tugas 3 - pemrograman berbasis web\\tugas3-vue-ut\\templates\\order-form.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8BEE3207-FF6C-4C26-BFE0-1A325DD52309}|tugas3-vue-ut.esproj|solutionrelative:templates\\order-form.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8BEE3207-FF6C-4C26-BFE0-1A325DD52309}|tugas3-vue-ut.esproj|d:\\users\\user\\documents\\ut\\tugas 3 - pemrograman berbasis web\\tugas3-vue-ut\\assets\\css\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{8BEE3207-FF6C-4C26-BFE0-1A325DD52309}|tugas3-vue-ut.esproj|solutionrelative:assets\\css\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,14 +31,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "index.html",
-              "DocumentMoniker": "D:\\Users\\user\\Documents\\UT\\Tugas 3 - Pemrograman Berbasis Web\\tugas3-vue-ut\\index.html",
-              "RelativeDocumentMoniker": "index.html",
-              "ToolTip": "D:\\Users\\user\\Documents\\UT\\Tugas 3 - Pemrograman Berbasis Web\\tugas3-vue-ut\\index.html",
-              "RelativeToolTip": "index.html",
-              "ViewState": "AgIAAEkBAAAAAAAAAAAUwFUBAAAcAAAAAAAAAA==",
+              "Title": "do-tracking.html",
+              "DocumentMoniker": "D:\\Users\\user\\Documents\\UT\\Tugas 3 - Pemrograman Berbasis Web\\tugas3-vue-ut\\templates\\do-tracking.html",
+              "RelativeDocumentMoniker": "templates\\do-tracking.html",
+              "ToolTip": "D:\\Users\\user\\Documents\\UT\\Tugas 3 - Pemrograman Berbasis Web\\tugas3-vue-ut\\templates\\do-tracking.html",
+              "RelativeToolTip": "templates\\do-tracking.html",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAUwHEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-29T03:00:28.204Z",
+              "WhenOpened": "2025-11-29T03:34:43.736Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "order-form.html",
+              "DocumentMoniker": "D:\\Users\\user\\Documents\\UT\\Tugas 3 - Pemrograman Berbasis Web\\tugas3-vue-ut\\templates\\order-form.html",
+              "RelativeDocumentMoniker": "templates\\order-form.html",
+              "ToolTip": "D:\\Users\\user\\Documents\\UT\\Tugas 3 - Pemrograman Berbasis Web\\tugas3-vue-ut\\templates\\order-form.html",
+              "RelativeToolTip": "templates\\order-form.html",
+              "ViewState": "AgIAACIAAAAAAAAAAAAswD4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-11-29T03:34:19.266Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "style.css",
+              "DocumentMoniker": "D:\\Users\\user\\Documents\\UT\\Tugas 3 - Pemrograman Berbasis Web\\tugas3-vue-ut\\assets\\css\\style.css",
+              "RelativeDocumentMoniker": "assets\\css\\style.css",
+              "ToolTip": "D:\\Users\\user\\Documents\\UT\\Tugas 3 - Pemrograman Berbasis Web\\tugas3-vue-ut\\assets\\css\\style.css",
+              "RelativeToolTip": "assets\\css\\style.css",
+              "ViewState": "AgIAAMUAAAAAAAAAAAAswOEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-11-29T03:30:43.953Z",
               "EditorCaption": ""
             }
           ]

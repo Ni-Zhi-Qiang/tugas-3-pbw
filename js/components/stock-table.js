@@ -1,238 +1,111 @@
-// Komponen Stock Table - Komponen Utama
-Vue.component('ba-stock-table', {
-    template: '#tpl-stock-table',
-    props: {
-        stockData: {
-            type: Array,
-            required: true
-        },
-        upbjjList: {
-            type: Array,
-            required: true
-        },
-        kategoriList: {
-            type: Array,
-            required: true
-        }
-    },
-    data() {
-        return {
-            // Filter states
-            selectedUPBJJ: '',
-            selectedKategori: '',
-            showLowStock: false,
-            showOutOfStock: false,
-            searchQuery: '',
-            sortField: 'judul',
-            sortDirection: 'asc',
-            
-            // UI states
-            showTooltip: false,
-            tooltipContent: '',
-            tooltipPosition: { x: 0, y: 0 },
-            editingStock: null,
-            newStock: this.getEmptyStock()
-        };
-    },
-    computed: {
-        // Computed property untuk filtered dan sorted data
-        filteredStock() {
-            let filtered = this.stockData;
+import statusBadge from './status-badge.js';
+import orderForm from './order-form.js';
+import appModal from './app-modal.js';
 
-            // Filter berdasarkan UPBJJ
-            if (this.selectedUPBJJ) {
-                filtered = filtered.filter(item => item.upbjj === this.selectedUPBJJ);
-            }
-
-            // Filter berdasarkan Kategori
-            if (this.selectedKategori) {
-                filtered = filtered.filter(item => item.kategori === this.selectedKategori);
-            }
-
-            // Filter stok menipis
-            if (this.showLowStock) {
-                filtered = filtered.filter(item => item.qty > 0 && item.qty < item.safety);
-            }
-
-            // Filter stok kosong
-            if (this.showOutOfStock) {
-                filtered = filtered.filter(item => item.qty === 0);
-            }
-
-            // Search filter
-            if (this.searchQuery) {
-                const query = this.searchQuery.toLowerCase();
-                filtered = filtered.filter(item => 
-                    item.kode.toLowerCase().includes(query) ||
-                    item.judul.toLowerCase().includes(query) ||
-                    item.lokasiRak.toLowerCase().includes(query)
-                );
-            }
-
-            // Sorting
-            filtered.sort((a, b) => {
-                let aVal = a[this.sortField];
-                let bVal = b[this.sortField];
-
-                if (typeof aVal === 'string') {
-                    aVal = aVal.toLowerCase();
-                    bVal = bVal.toLowerCase();
-                }
-
-                if (this.sortDirection === 'asc') {
-                    return aVal > bVal ? 1 : -1;
-                } else {
-                    return aVal < bVal ? 1 : -1;
-                }
-            });
-
-            return filtered;
-        },
-
-        // Available categories based on selected UPBJJ
-        availableKategories() {
-            if (!this.selectedUPBJJ) {
-                return this.kategoriList;
-            }
-            const categories = new Set();
-            this.stockData
-                .filter(item => item.upbjj === this.selectedUPBJJ)
-                .forEach(item => categories.add(item.kategori));
-            return Array.from(categories);
-        },
-
-        // Statistics
-        statistics() {
-            const total = this.stockData.length;
-            const aman = this.stockData.filter(item => item.qty >= item.safety).length;
-            const menipis = this.stockData.filter(item => item.qty > 0 && item.qty < item.safety).length;
-            const kosong = this.stockData.filter(item => item.qty === 0).length;
-
-            return { total, aman, menipis, kosong };
-        }
-    },
-    watch: {
-        // Watcher untuk reset kategori ketika UPBJJ berubah
-        selectedUPBJJ(newUPBJJ) {
-            if (newUPBJJ && !this.availableKategories.includes(this.selectedKategori)) {
-                this.selectedKategori = '';
-            }
-        },
-
-        // Watcher untuk live search
-        searchQuery(newQuery) {
-            console.log('Search query changed:', newQuery);
-        }
-    },
-    methods: {
-        // Format currency
-        formatCurrency(value) {
-            return new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                minimumFractionDigits: 0
-            }).format(value);
-        },
-
-        // Format quantity dengan satuan
-        formatQuantity(qty) {
-            return `${qty} buah`;
-        },
-
-        // Show tooltip
-        showTooltipInfo(event, catatanHTML) {
-            this.tooltipContent = catatanHTML;
-            this.tooltipPosition = {
-                x: event.clientX,
-                y: event.clientY
-            };
-            this.showTooltip = true;
-        },
-
-        // Hide tooltip
-        hideTooltip() {
-            this.showTooltip = false;
-        },
-
-        // Sort handler
-        sortBy(field) {
-            if (this.sortField === field) {
-                this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                this.sortField = field;
-                this.sortDirection = 'asc';
-            }
-        },
-
-        // Reset filters
-        resetFilters() {
-            this.selectedUPBJJ = '';
-            this.selectedKategori = '';
-            this.showLowStock = false;
-            this.showOutOfStock = false;
-            this.searchQuery = '';
-        },
-
-        // Get empty stock template
-        getEmptyStock() {
-            return {
-                kode: '',
-                judul: '',
-                kategori: '',
-                upbjj: '',
-                lokasiRak: '',
-                harga: 0,
-                qty: 0,
-                safety: 0,
-                catatanHTML: ''
-            };
-        },
-
-        // Edit stock
-        editStock(stock) {
-            this.editingStock = { ...stock };
-        },
-
-        // Save stock (update)
-        saveStock() {
-            if (this.editingStock) {
-                this.$emit('edit-stock', this.editingStock);
-                this.editingStock = null;
-            }
-        },
-
-        // Cancel edit
-        cancelEdit() {
-            this.editingStock = null;
-        },
-
-        // Delete stock
-        deleteStock(stock) {
-            if (confirm(`Apakah Anda yakin ingin menghapus stok untuk ${stock.judul}?`)) {
-                this.$emit('delete-stock', stock.kode);
-            }
-        },
-
-        // Add new stock
-        addNewStock() {
-            if (this.newStock.kode && this.newStock.judul) {
-                this.$emit('add-stock', { ...this.newStock });
-                this.newStock = this.getEmptyStock();
-            } else {
-                alert('Kode dan Judul harus diisi!');
-            }
-        },
-
-        // Handle keyboard events
-        handleKeydown(event, action) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                if (action === 'save') this.saveStock();
-                if (action === 'add') this.addNewStock();
-            }
-            if (event.key === 'Escape') {
-                this.cancelEdit();
-            }
-        }
+export default {
+  template: '#tpl-stock-table',
+  props: ['dataUrl'],
+  components: { 'status-badge': statusBadge, 'order-form': orderForm, 'app-modal': appModal },
+  data() {
+    return {
+      raw: null, // full JSON
+      stok: [], // array
+      upbjjList: [],
+      kategoriList: [],
+      filters: { upbjj: '', kategori: '', lowStock: false, zero: false, keyword: '' },
+      sort: { by: '', dir: 'asc' },
+      showModal: false,
+      modalMode: 'create', // create | edit
+      editItem: null,
+      // watchers demonstration
+      watcherLog1: 0,
+      watcherLog2: 0
     }
-});
+  },
+  async created() {
+    const payload = await (await fetch(this.dataUrl)).json();
+    this.raw = payload;
+    this.stok = JSON.parse(JSON.stringify(payload.stok || []));
+    this.upbjjList = payload.upbjjList || [];
+    this.kategoriList = payload.kategoriList || [];
+  },
+  computed: {
+    // emulate filters: currency & qty unit
+    filtered() {
+      let out = this.stok.slice();
+
+      // keyword (title or code)
+      if (this.filters.keyword) {
+        const k = this.filters.keyword.toLowerCase();
+        out = out.filter(o => o.judul.toLowerCase().includes(k) || o.kode.toLowerCase().includes(k));
+      }
+      if (this.filters.upbjj) {
+        out = out.filter(o => o.upbjj === this.filters.upbjj);
+      }
+      if (this.filters.kategori) {
+        out = out.filter(o => o.kategori === this.filters.kategori);
+      }
+      if (this.filters.lowStock) {
+        out = out.filter(o => o.qty < o.safety);
+      }
+      if (this.filters.zero) {
+        out = out.filter(o => o.qty === 0);
+      }
+
+      if (this.sort.by) {
+        out.sort((a, b) => {
+          let A = a[this.sort.by], B = b[this.sort.by];
+          if (typeof A === 'string') A = A.toLowerCase(), B = B.toLowerCase();
+          if (A < B) return this.sort.dir === 'asc' ? -1 : 1;
+          if (A > B) return this.sort.dir === 'asc' ? 1 : -1;
+          return 0;
+        });
+      }
+      return out;
+    },
+    paketList() { return this.raw?.paket || [] }
+  },
+  methods: {
+    fmtRp(v) { return 'Rp ' + Number(v).toLocaleString('id-ID') },
+    fmtQty(v) { return `${v} buah` },
+    resetFilters() { this.filters = { upbjj: '', kategori: '', lowStock: false, zero: false, keyword: '' } },
+    setSort(by) {
+      if (this.sort.by === by) this.sort.dir = this.sort.dir === 'asc' ? 'desc' : 'asc';
+      else { this.sort.by = by; this.sort.dir = 'asc' }
+    },
+    openCreate() { this.modalMode = 'create'; this.editItem = null; this.showModal = true },
+    openEdit(item) { this.modalMode = 'edit'; this.editItem = JSON.parse(JSON.stringify(item)); this.showModal = true },
+    onSave(item) {
+      if (this.modalMode === 'create') {
+        this.stok.push(item);
+      } else {
+        const idx = this.stok.findIndex(s => s.kode === item.kode);
+        if (idx >= 0) this.stok.splice(idx, 1, item);
+      }
+      this.showModal = false;
+    },
+    remove(item) {
+      if (!confirm(`Hapus ${item.judul} (${item.kode})?`)) return;
+      const idx = this.stok.findIndex(s => s.kode === item.kode);
+      if (idx >= 0) this.stok.splice(idx, 1);
+    }
+  },
+  watch: {
+    'filters.upbjj'(n, o) {
+      this.watcherLog1++;
+      // Dependent filter: when upbjj set, narrow kategoriList to those present in stok
+      if (n) {
+        const cats = new Set(this.stok.filter(s => s.upbjj === n).map(s => s.kategori));
+        this.kategoriList = Array.from(cats);
+      } else {
+        // restore full from raw
+        this.kategoriList = this.raw?.kategoriList || [];
+      }
+    },
+    'filters.lowStock'(n, o) {
+      this.watcherLog2++;
+      // example side-effect log — purely to show watcher used
+      console.log('lowStock changed =>', n);
+    }
+  }
+}

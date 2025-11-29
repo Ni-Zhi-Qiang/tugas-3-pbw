@@ -1,0 +1,11 @@
+<template id="tpl-app-modal">
+    <div class="modal-backdrop" @click.self="closeModal">
+        <div class="modal">
+            <h3>{{title}}</h3>
+            <slot></slot>
+            <div style="margin-top:12px;text-align:right">
+                <button class="btn" @click="closeModal">Close</button>
+            </div>
+        </div>
+    </div>
+</template>
